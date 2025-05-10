@@ -1,0 +1,109 @@
+# Top 10 EV Makes
+top_makes = df['make'].value_counts().head(10)
+plt.figure(figsize=(10,6))
+top_makes.plot(kind='bar', color='skyblue')
+plt.title("Top 10 Electric Vehicle Makes")
+plt.xlabel("Make")
+plt.ylabel("Number of Vehicles")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Top 10 Cities with Most EVs
+top_cities = df['city'].value_counts().head(10)
+plt.figure(figsize=(10,6))
+top_cities.plot(kind='bar', color='orange')
+plt.title("Top 10 Cities with Most Electric Vehicles")
+plt.xlabel("City")
+plt.ylabel("Count")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Electric Range Distribution
+plt.figure(figsize=(10,6))
+sns.histplot(df['electric_range'], bins=30, kde=True, color='purple')
+plt.title("Distribution of Electric Range")
+plt.xlabel("Electric Range (Miles)")
+plt.ylabel("Frequency")
+plt.tight_layout()
+plt.show()
+
+# EV Adoption Over Years
+yearly_counts = df['model_year'].value_counts().sort_index()
+plt.figure(figsize=(10,6))
+plt.plot(yearly_counts.index, yearly_counts.values, marker='o', color='green')
+plt.title("EV Adoption Over the Years")
+plt.xlabel("Model Year")
+plt.ylabel("Number of Vehicles")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# Clean city names
+df['city'] = df['city'].str.upper()
+
+# Filter Tesla Vehicles
+tesla_rows = df[df['make'].str.contains('TESLA', na=False)]
+print("Tesla vehicles:\n", tesla_rows[['make', 'model']].head())
+
+# Boxplot: Electric Range by Top 5 Makes
+top_5_makes = df['make'].value_counts().head(5).index
+df_top_makes = df[df['make'].isin(top_5_makes)]
+
+plt.figure(figsize=(10,6))
+sns.boxplot(x='make', y='electric_range', hue='make', data=df_top_makes, palette='Set2', dodge=False, legend=False)
+plt.title("Electric Range Distribution by Top 5 Makes")
+plt.xlabel("Make")
+plt.ylabel("Electric Range (Miles)")
+plt.tight_layout()
+plt.show()
+
+# Pie Chart: Electric Vehicle Type
+ev_type_counts = df['electric_vehicle_type'].value_counts()
+plt.figure(figsize=(8,8))
+plt.pie(ev_type_counts, labels=ev_type_counts.index, autopct='%1.1f%%', startangle=140, colors=sns.color_palette('pastel'))
+plt.title("Electric Vehicle Type Distribution")
+plt.tight_layout()
+plt.show()
+
+# Scatter Plot: Electric Range vs. Model Year
+plt.figure(figsize=(10,6))
+plt.scatter(df['model_year'], df['electric_range'], alpha=0.5, c='darkcyan')
+plt.title("Electric Range vs. Model Year")
+plt.xlabel("Model Year")
+plt.ylabel("Electric Range (Miles)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# Heatmap: Correlation Matrix
+numeric_data = df.select_dtypes(include=[np.number])
+corr_matrix = numeric_data.corr()
+plt.figure(figsize=(10,8))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+plt.title("Correlation Heatmap of Numeric Features")
+plt.tight_layout()
+plt.show()
+
+# Line Chart: EV Count by Model Year
+model_year_counts = df['model_year'].value_counts().sort_index()
+plt.figure(figsize=(10,6))
+plt.plot(model_year_counts.index, model_year_counts.values, marker='o', linestyle='-', color='blue')
+plt.title("Electric Vehicle Count by Model Year")
+plt.xlabel("Model Year")
+plt.ylabel("Number of EVs")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+#histogram
+
+# Histogram – Electric Range
+plt.figure(figsize=(10,6))
+plt.hist(df['electric_range'], bins=30, color='skyblue', edgecolor='black')
+plt.title("Histogram of Electric Vehicle Range")
+plt.xlabel("Electric Range (Miles)")
+plt.ylabel("Frequency")
+plt.tight_layout()
+plt.show()
