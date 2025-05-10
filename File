@@ -1,0 +1,58 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the CSV file correctly
+df = pd.read_csv(r"C:\Users\diya\Downloads\pythonproject.csv")
+
+# Display first few rows
+print(df.head())
+
+# Dataset shape and column names
+print("Shape of dataset:", df.shape)
+print("Columns:", df.columns.tolist())
+
+# Standardize column names
+df.columns = df.columns.str.lower().str.replace(' ', '_')
+
+# Check for null values
+print("Null values in each column:\n", df.isnull().sum())
+
+# Drop duplicate rows
+df.drop_duplicates(inplace=True)
+
+# Fill missing model_year with most frequent value
+df['model_year'] = df['model_year'].fillna(df['model_year'].mode()[0])
+
+# Convert model_year to integer
+df['model_year'] = df['model_year'].astype(int)
+
+# Preview cleaned data
+print(df.head())
+
+# Summary statistics of numeric columns
+print(df.describe())
+
+# Most common EV makes
+print("Top 10 makes:\n", df['make'].value_counts().head(10))
+
+# Count of EVs by city
+print("Top 10 cities:\n", df['city'].value_counts().head(10))
+
+# Filter: Vehicles with electric range > 200 miles
+high_range_vehicles = df[df['electric_range'] > 200]
+print("Vehicles with range > 200:\n", high_range_vehicles[['make', 'model', 'electric_range']].head())
+
+# Sort by model year (descending)
+sorted_by_year = df.sort_values(by='model_year', ascending=False)
+print("Sorted by model year:\n", sorted_by_year[['make', 'model', 'model_year']].head())
+
+# Count of EVs per year
+grouped_by_year = df.groupby('model_year').size()
+print("EV count by year:\n", grouped_by_year)
+
+# Count of vehicles by make and model
+make_model_count = df.groupby(['make', 'model']).size().reset_index(name='count')
+print("Top make-model combos:\n", make_model_count.sort_values(by='count', ascending=False).head())
+
